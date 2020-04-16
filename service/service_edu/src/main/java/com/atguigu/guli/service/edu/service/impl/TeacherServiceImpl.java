@@ -11,14 +11,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-/**
- * <p>
- * 讲师 服务实现类
- * </p>
- *
- * @author Helen
- * @since 2020-04-12
- */
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> implements TeacherService {
 
@@ -27,7 +22,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("sort");
 
-        if (teacherQueryVo == null){
+        if (teacherQueryVo == null) {
             return baseMapper.selectPage(pageParam, queryWrapper);
         }
 
@@ -37,6 +32,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         String end = teacherQueryVo.getJoinDateEnd();
 
         if (!StringUtils.isEmpty(name)) {
+            System.out.println(name + "==============");
             //左%会使索引失效
             queryWrapper.likeRight("name", name);
         }
@@ -54,5 +50,14 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         }
 
         return baseMapper.selectPage(pageParam, queryWrapper);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectNameListByKey(String key) {
+        QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<>();
+        teacherQueryWrapper.select("name");
+        teacherQueryWrapper.likeRight("name", key);
+        List<Map<String, Object>> maps = baseMapper.selectMaps(teacherQueryWrapper);
+        return maps;
     }
 }
