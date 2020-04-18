@@ -4,6 +4,7 @@ package com.atguigu.guli.service.edu.controller.admin;
 import com.atguigu.guli.common.base.result.R;
 import com.atguigu.guli.service.edu.entity.Teacher;
 import com.atguigu.guli.service.edu.entity.vo.TeacherQueryVo;
+import com.atguigu.guli.service.edu.feign.OssFileService;
 import com.atguigu.guli.service.edu.service.TeacherService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,7 +23,7 @@ import java.util.Map;
  * 讲师 前端控制器
  * </p>
  *
- * @author Helen
+ * @author hhxx
  * @since 2020-04-12
  */
 
@@ -36,6 +37,9 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private OssFileService ossFileService;
+
     @ApiOperation("所有讲师列表")
     @GetMapping("list")
     public R listAll() {
@@ -43,9 +47,12 @@ public class TeacherController {
         return R.ok().data("items", list).message("获取讲师列表成功");
     }
 
-    @ApiOperation(value = "根据ID删除讲师", notes = "根据ID删除讲师")
+    @ApiOperation(value = "根据ID删除讲师", notes = "根据ID删除讲师，逻辑删除")
     @DeleteMapping("remove/{id}")
     public R removeById(@PathVariable String id) {
+        //删除头像
+        teacherService.removeAvatarById(id);
+        //删除讲师信息
         boolean result = teacherService.removeById(id);
         if (result) {
             return R.ok().message("删除成功");
@@ -116,6 +123,30 @@ public class TeacherController {
         List<Map<String, Object>> nameList = teacherService.selectNameListByKey(key);
 
         return R.ok().data("nameList", nameList);
+    }
+
+    @ApiOperation("测试服务调用")
+    @GetMapping("test")
+    public R test(){
+        ossFileService.test();
+        return R.ok();
+    }
+
+    @ApiOperation("测试并发")
+    @GetMapping("test_concurrent")
+    public R testConcurrent(){
+        log.info("...........test_concurrent");
+        return R.ok();
+    }
+
+    @GetMapping("/message1")
+    public String message1() {
+        return "message1";
+    }
+
+    @GetMapping("/message2")
+    public String message2() {
+        return "message2";
     }
 
 }
