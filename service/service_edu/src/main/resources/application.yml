@@ -26,9 +26,10 @@ spring:
         port: 8081 #跟控制台交流的端口，随意指定一个未使用的端口即可
         dashboard: localhost:8080 # 指定控制台服务的地址
 #mybatis日志
-#mybatis-plus:
+mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:com/atguigu/guli/service/edu/mapper/xml/*.xml
 ##设置日志级别
 #logging:
 #  level:
