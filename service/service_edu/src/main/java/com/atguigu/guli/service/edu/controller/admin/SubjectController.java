@@ -44,7 +44,7 @@ public class SubjectController {
     @GetMapping("nested-list")
     public R nestedList(){
         List<SubjectVo> subjectVos = subjectService.nestedList();
-        System.out.println(subjectVos);
+//        System.out.println(subjectVos);
         return R.ok().data("items",subjectVos);
     }
 

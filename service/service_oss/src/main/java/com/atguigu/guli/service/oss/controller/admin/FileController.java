@@ -28,14 +28,14 @@ public class FileController {
     @ApiOperation("文件上传")
     @PostMapping("upload")
     public R upload(@ApiParam(value = "模块", required = true)
-                    @RequestParam("model") String model,
+                    @RequestParam("module") String module,
                     @ApiParam(value = "文件", required = true)
                     @RequestParam("file") MultipartFile file) {
         String uploadUrl = null;
         try {
             InputStream inputStream = file.getInputStream();
             String originalFilename = file.getOriginalFilename();
-            uploadUrl = fileService.upload(inputStream, model, originalFilename);
+            uploadUrl = fileService.upload(inputStream, module, originalFilename);
         } catch (Exception e) {
             throw new GuliException(ResultCodeEnum.FILE_UPLOAD_ERROR);
         }
