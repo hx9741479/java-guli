@@ -27,8 +27,8 @@ spring:
         dashboard: localhost:8080 # 指定控制台服务的地址
 #mybatis日志
 mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:com/atguigu/guli/service/edu/mapper/xml/*.xml
 ##设置日志级别
 #logging:
