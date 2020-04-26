@@ -1,6 +1,7 @@
 package com.atguigu.guli.service.edu.controller.admin;
 
 
+import com.atguigu.guli.common.base.result.ExceptionUtils;
 import com.atguigu.guli.common.base.result.R;
 import com.atguigu.guli.common.base.result.ResultCodeEnum;
 import com.atguigu.guli.service.base.exception.GuliException;
@@ -36,6 +37,7 @@ public class SubjectController {
             subjectService.batchImport(inputStream);
             return R.ok().message("导入成功！");
         } catch (Exception e) {
+            log.error(ExceptionUtils.getMessage(e));
             throw new GuliException(ResultCodeEnum.EXCEL_DATA_IMPORT_ERROR);
         }
     }
