@@ -4,6 +4,7 @@ import com.atguigu.guli.service.edu.entity.Chapter;
 import com.atguigu.guli.service.edu.entity.Video;
 import com.atguigu.guli.service.edu.entity.vo.ChapterVo;
 import com.atguigu.guli.service.edu.entity.vo.VideoVo;
+import com.atguigu.guli.service.edu.feign.VodMediaService;
 import com.atguigu.guli.service.edu.mapper.ChapterMapper;
 import com.atguigu.guli.service.edu.mapper.VideoMapper;
 import com.atguigu.guli.service.edu.service.ChapterService;
@@ -30,6 +31,8 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
 
     @Autowired
     VideoMapper videoMapper;
+    @Autowired
+    VodMediaService vodMediaService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -78,7 +81,7 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
 
             for (int j = 0; j < videoList.size(); j++) {
                 Video video = videoList.get(j);
-                if(chapter.getId().equals(video.getChapterId())){
+                if (chapter.getId().equals(video.getChapterId())) {
                     VideoVo videoVo = new VideoVo();
                     BeanUtils.copyProperties(video, videoVo);
                     videoVoList.add(videoVo);
@@ -89,4 +92,6 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
         }
         return chapterVoList;
     }
+
+
 }

@@ -87,4 +87,10 @@ public class CodeGenerator {
         // 6、执行
         mpg.execute();
     }
+
+    @Test
+    void method(){
+        System.out.println(20 % 20);
+    }
+
 }

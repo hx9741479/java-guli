@@ -5,6 +5,7 @@ import com.atguigu.guli.common.base.result.R;
 import com.atguigu.guli.service.edu.entity.Chapter;
 import com.atguigu.guli.service.edu.entity.vo.ChapterVo;
 import com.atguigu.guli.service.edu.service.ChapterService;
+import com.atguigu.guli.service.edu.service.VideoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,6 +30,8 @@ public class ChapterController {
 
     @Autowired
     ChapterService chapterService;
+    @Autowired
+    private VideoService videoService;
 
     @ApiOperation("新增章节")
     @PostMapping("save")
@@ -77,8 +80,9 @@ public class ChapterController {
             @ApiParam(value = "章节ID", required = true)
             @PathVariable String id) {
 
-        //TODO 删除视频：VOD
         //在此处调用vod中的删除视频文件的接口
+        //删除视频：VOD
+        videoService.removeMediaVideoByChapterId(id);
 
         boolean result = chapterService.removeChapterById(id);
         if (result) {

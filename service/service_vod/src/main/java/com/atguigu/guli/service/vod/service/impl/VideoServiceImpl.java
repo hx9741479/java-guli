@@ -78,13 +78,15 @@ public class VideoServiceImpl implements VideoService {
         StringBuffer idListStr = new StringBuffer();
         for (int i = 0; i < size; i++) {
             idListStr.append(videoIdList.get(i));
-            if(i == size - 1 || i % 20 == 19){
-                System.out.println("-------" + idListStr);
+            if (i == size - 1 || i % 20 == 19) {
+//                System.out.println("idListStr = " + idListStr.toString());
+                //支持传入多个视频ID，多个用逗号分隔，最多20个
+                request.setVideoIds(idListStr.toString());
+                client.getAcsResponse(request);
                 idListStr = new StringBuffer();
-            }else if (i % 20 < 19){
+            } else if (i % 20 < 19) {
                 idListStr.append(",");
             }
-
         }
 
     }

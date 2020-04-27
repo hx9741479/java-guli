@@ -7,6 +7,7 @@ import com.atguigu.guli.service.edu.entity.vo.CoursePublishVo;
 import com.atguigu.guli.service.edu.entity.vo.CourseQueryVo;
 import com.atguigu.guli.service.edu.entity.vo.CourseVo;
 import com.atguigu.guli.service.edu.service.CourseService;
+import com.atguigu.guli.service.edu.service.VideoService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,8 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private VideoService videoService;
 
     @ApiOperation("新增课程")
     @PostMapping("save-course-info")
@@ -83,8 +86,8 @@ public class CourseController {
             @ApiParam(value = "课程ID", required = true)
             @PathVariable String id) {
 
-        //TODO 删除视频：VOD
         //在此处调用vod中的删除视频文件的接口
+        videoService.removeMediaVideoByCourseId(id);
 
         //删除封面：OSS
         courseService.removeCoverById(id);

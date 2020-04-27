@@ -65,19 +65,19 @@ public class TeacherController {
     @GetMapping("list/{page}/{limit}")
     public R listPage(@ApiParam(value = "当前页码", required = true) @PathVariable Long page,
                       @ApiParam(value = "每页记录数", required = true) @PathVariable Long limit,
-                      @ApiParam("讲师列表查询对象") TeacherQueryVo teacherQueryVo){
-
+                      @ApiParam("讲师列表查询对象") TeacherQueryVo teacherQueryVo) {
         Page<Teacher> pageParam = new Page<>(page, limit);
         IPage<Teacher> pageModel = teacherService.selectPage(pageParam, teacherQueryVo);
         List<Teacher> records = pageModel.getRecords();
         long total = pageModel.getTotal();
 
-        return  R.ok().data("total", total).data("rows", records);
+        return R.ok().data("total", total).data("rows", records);
     }
 
     @ApiOperation("更新讲师")
     @PutMapping("update")
-    public R updateById(@ApiParam(value = "讲师对象", required = true) @RequestBody Teacher teacher) {
+    public R updateById(@ApiParam(value = "讲师对象", required = true)
+                        @RequestBody Teacher teacher) {
         boolean result = teacherService.updateById(teacher);
         if (result) {
             return R.ok().message("修改成功");
@@ -99,16 +99,16 @@ public class TeacherController {
 
     @ApiOperation("新增讲师")
     @PostMapping("save")
-    public R saveTeacher(@ApiParam(value = "讲师对象",required = true) Teacher teacher){
+    public R saveTeacher(@ApiParam(value = "讲师对象", required = true) Teacher teacher) {
         teacherService.save(teacher);
         return R.ok().message("新增成功！");
     }
 
     @ApiOperation("根据id列表删除讲师")
     @DeleteMapping("batch-remove")
-    public R removeRows(@ApiParam(value = "讲师id列表",required = true) @RequestBody List<String> idList){
+    public R removeRows(@ApiParam(value = "讲师id列表", required = true) @RequestBody List<String> idList) {
         boolean result = teacherService.removeByIds(idList);
-        if(result){
+        if (result) {
             return R.ok().message("删除成功");
         }
         return R.error().message("数据不存在");
@@ -118,7 +118,7 @@ public class TeacherController {
     @GetMapping("list/name/{key}")
     public R selectNameListByKey(
             @ApiParam(value = "查询关键字", required = true)
-            @PathVariable String key){
+            @PathVariable String key) {
         // hx: 这个地方用Map来接收，考虑了将来扩展问题 比如将来 要根据别的字段查 就可以复用
         List<Map<String, Object>> nameList = teacherService.selectNameListByKey(key);
 
@@ -127,14 +127,14 @@ public class TeacherController {
 
     @ApiOperation("测试服务调用")
     @GetMapping("test")
-    public R test(){
+    public R test() {
         ossFileService.test();
         return R.ok();
     }
 
     @ApiOperation("测试并发")
     @GetMapping("test_concurrent")
-    public R testConcurrent(){
+    public R testConcurrent() {
         log.info("...........test_concurrent");
         return R.ok();
     }
