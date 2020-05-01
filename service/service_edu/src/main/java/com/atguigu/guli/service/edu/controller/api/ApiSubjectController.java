@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @CrossOrigin
-@Api(description="课程分类")
+@Api(tags = {"课程分类"})
 @RestController
 @RequestMapping("/api/edu/subject")
 public class ApiSubjectController {
