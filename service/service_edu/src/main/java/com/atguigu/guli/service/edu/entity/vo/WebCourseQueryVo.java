@@ -13,4 +13,6 @@ public class WebCourseQueryVo implements Serializable {
     private String buyCountSort;
     private String gmtCreateSort;
     private String priceSort;
+
+    private Integer type;// 1: 价格降序 2：价格升序
 }

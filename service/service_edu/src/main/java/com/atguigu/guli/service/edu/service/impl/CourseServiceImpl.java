@@ -204,7 +204,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         }
 
         if (!StringUtils.isEmpty(webCourseQueryVo.getPriceSort())) {
-            queryWrapper.orderByDesc("price");
+            if(webCourseQueryVo.getType() == null || webCourseQueryVo.getType() == 1){
+                queryWrapper.orderByDesc("price");
+            }else {
+                queryWrapper.orderByAsc("price");
+            }
         }
 
         return baseMapper.selectList(queryWrapper);
