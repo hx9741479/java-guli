@@ -1,10 +1,9 @@
 package com.atguigu.guli.service.ucenter.service.impl;
 
-import com.atguigu.guli.common.base.result.FormUtils;
-import com.atguigu.guli.common.base.result.MD5;
-import com.atguigu.guli.common.base.result.ResultCodeEnum;
+import com.atguigu.guli.common.base.result.*;
 import com.atguigu.guli.service.base.exception.GuliException;
 import com.atguigu.guli.service.ucenter.entity.Member;
+import com.atguigu.guli.service.ucenter.entity.vo.LoginVo;
 import com.atguigu.guli.service.ucenter.entity.vo.RegisterVo;
 import com.atguigu.guli.service.ucenter.mapper.MemberMapper;
 import com.atguigu.guli.service.ucenter.service.MemberService;
@@ -71,4 +70,46 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         member.setAvatar("https://guli-file-9741479.oss-cn-beijing.aliyuncs.com/avatar/default/default.jpg");
         baseMapper.insert(member);
     }
+
+    @Override
+    public String login(LoginVo loginVo) {
+
+        String mobile = loginVo.getMobile();
+        String password = loginVo.getPassword();
+
+        //校验参数
+        if (StringUtils.isEmpty(mobile)
+                || !FormUtils.isMobile(mobile)
+                || StringUtils.isEmpty(password)) {
+            throw new GuliException(ResultCodeEnum.PARAM_ERROR);
+        }
+
+        //校验手机号
+        QueryWrapper<Member> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mobile", mobile);
+        Member member = baseMapper.selectOne(queryWrapper);
+        if(member == null){
+            throw new GuliException(ResultCodeEnum.LOGIN_MOBILE_ERROR);
+        }
+
+        //校验密码
+        if(!MD5.encrypt(password).equals(member.getPassword())){
+            throw new GuliException(ResultCodeEnum.LOGIN_PASSWORD_ERROR);
+        }
+
+        //检验用户是否被禁用
+        if(member.getDisabled()){
+            throw new GuliException(ResultCodeEnum.LOGIN_DISABLED_ERROR);
+        }
+
+        JwtInfo jwtInfo = new JwtInfo();
+        jwtInfo.setId(member.getId());
+        jwtInfo.setNickname(member.getNickname());
+        jwtInfo.setAvatar(member.getAvatar());
+        String jwtToken = JwtUtils.getJwtToken(jwtInfo, 1800);
+
+        return jwtToken;
+    }
+
+
 }
