@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Api(description = "会员管理")
+@Api(tags = {"会员管理"})
 @CrossOrigin
 @RestController
 @RequestMapping("/api/ucenter/member")
