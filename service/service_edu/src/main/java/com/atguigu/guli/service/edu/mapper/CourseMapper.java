@@ -1,5 +1,6 @@
 package com.atguigu.guli.service.edu.mapper;
 
+import com.atguigu.guli.service.base.dto.CourseDto;
 import com.atguigu.guli.service.edu.entity.Course;
 import com.atguigu.guli.service.edu.entity.vo.CoursePublishVo;
 import com.atguigu.guli.service.edu.entity.vo.CourseVo;
@@ -35,4 +36,6 @@ public interface CourseMapper extends BaseMapper<Course> {
     CoursePublishVo selectCoursePublishVoById(String id);
 
     WebCourseVo selectWebCourseVoById(String courseId);
+
+    CourseDto selectCourseDtoById(String courseId);
 }
