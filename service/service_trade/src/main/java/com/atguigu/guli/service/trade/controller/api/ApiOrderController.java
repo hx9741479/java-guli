@@ -4,6 +4,7 @@ package com.atguigu.guli.service.trade.controller.api;
 import com.atguigu.guli.common.base.result.JwtInfo;
 import com.atguigu.guli.common.base.result.JwtUtils;
 import com.atguigu.guli.common.base.result.R;
+import com.atguigu.guli.common.base.result.ResultCodeEnum;
 import com.atguigu.guli.service.trade.entity.Order;
 import com.atguigu.guli.service.trade.service.OrderService;
 import io.swagger.annotations.Api;
@@ -54,6 +55,7 @@ public class ApiOrderController {
         List<Order> list = orderService.selectByMemberId(jwtInfo.getId());
         return R.ok().data("items", list);
     }
+
     @ApiOperation(value = "删除订单")
     @DeleteMapping("auth/remove/{orderId}")
     public R remove(@PathVariable String orderId, HttpServletRequest request) {
@@ -65,4 +67,14 @@ public class ApiOrderController {
             return R.error().message("数据不存在");
         }
     }
+
+    @GetMapping("/query-pay-status/{orderNo}")
+    public R queryPayStatus(@PathVariable String orderNo) {
+        boolean result = orderService.queryPayStatus(orderNo);
+        if (result) {//支付成功
+            return R.ok().message("支付成功");
+        }
+        return R.setResult(ResultCodeEnum.PAY_RUN);//支付中
+    }
+
 }

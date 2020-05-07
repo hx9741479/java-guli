@@ -5,18 +5,24 @@ import com.atguigu.guli.service.base.dto.CourseDto;
 import com.atguigu.guli.service.base.dto.MemberDto;
 import com.atguigu.guli.service.base.exception.GuliException;
 import com.atguigu.guli.service.trade.entity.Order;
+import com.atguigu.guli.service.trade.entity.PayLog;
 import com.atguigu.guli.service.trade.feign.EduCourseService;
 import com.atguigu.guli.service.trade.feign.UcenterMemberService;
 import com.atguigu.guli.service.trade.mapper.OrderMapper;
+import com.atguigu.guli.service.trade.mapper.PayLogMapper;
 import com.atguigu.guli.service.trade.service.OrderService;
 import com.atguigu.guli.service.trade.util.OrderNoUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,6 +40,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     private UcenterMemberService ucenterMemberService;
+
+    @Autowired
+    private PayLogMapper payLogMapper;
 
 
     /**
@@ -109,7 +118,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public List<Order> selectByMemberId(String id) {
         QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
         orderQueryWrapper.orderByDesc("gmt_create");
-        orderQueryWrapper.eq("member_id",id);
+        orderQueryWrapper.eq("member_id", id);
         return baseMapper.selectList(orderQueryWrapper);
     }
 
@@ -120,5 +129,45 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 .eq("id", orderId)
                 .eq("member_id", memberId);
         return this.remove(queryWrapper);
+    }
+
+    @Override
+    public Order getOrderByOrderNo(String orderNo) {
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_no", orderNo);
+        return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateOrderStatus(Map<String, String> map) {
+
+        //更新订单状态
+        String orderNo = map.get("out_trade_no");
+        Order order = this.getOrderByOrderNo(orderNo);
+        order.setStatus(1);//支付成功
+        baseMapper.updateById(order);
+
+        //记录支付日志
+        PayLog payLog = new PayLog();
+        payLog.setOrderNo(orderNo);
+        payLog.setPayTime(new Date());
+        payLog.setPayType(1);//支付类型
+        payLog.setTotalFee(Long.parseLong(map.get("total_fee")));//总金额(分)
+        payLog.setTradeState(map.get("result_code"));//支付状态
+        payLog.setTransactionId(map.get("transaction_id"));
+        payLog.setAttr(new Gson().toJson(map));
+        payLogMapper.insert(payLog);
+
+        //更新课程销量：有问题直接熔断
+        eduCourseService.updateBuyCountById(order.getCourseId());
+    }
+
+    @Override
+    public boolean queryPayStatus(String orderNo) {
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_no", orderNo);
+        Order order = baseMapper.selectOne(queryWrapper);
+        return order.getStatus() == 1;
     }
 }
