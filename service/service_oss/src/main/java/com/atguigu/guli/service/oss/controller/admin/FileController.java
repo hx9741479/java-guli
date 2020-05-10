@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 @Api(tags = {"讲师管理"})
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/admin/oss/file")
 @Slf4j

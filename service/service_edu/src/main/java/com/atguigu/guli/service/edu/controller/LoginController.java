@@ -3,7 +3,7 @@ package com.atguigu.guli.service.edu.controller;
 import com.atguigu.guli.common.base.result.R;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin //跨域
+//@CrossOrigin //跨域
 @RestController
 @RequestMapping("/user")
 public class LoginController {
@@ -26,7 +26,7 @@ public class LoginController {
         return R.ok()
                 .data("roles","[admin]")
                 .data("name","admin")
-                .data("avatar","https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg");
+                .data("avatar","https://guli-file-9741479.oss-cn-beijing.aliyuncs.com/avatar/default/default.jpg");
     }
 
     /**

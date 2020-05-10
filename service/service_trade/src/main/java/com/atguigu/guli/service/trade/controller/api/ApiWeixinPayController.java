@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin //跨域
+//@CrossOrigin //跨域
 @RestController
 @Api(tags = {"网站微信支付"})
 @RequestMapping("/api/trade/weixin-pay")

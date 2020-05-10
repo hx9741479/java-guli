@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @Api(tags = {"课程收藏"})
 @RequestMapping("/api/edu/course-collect")

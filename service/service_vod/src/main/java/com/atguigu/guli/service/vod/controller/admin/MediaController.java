@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.util.List;
 
 @Api(tags = {"阿里云视频点播"})
-@CrossOrigin
 @RestController
 @RequestMapping("/admin/vod/media")
 @Slf4j

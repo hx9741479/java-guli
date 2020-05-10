@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = {"课程类别管理"})
 @RestController
 @RequestMapping("/admin/edu/subject")

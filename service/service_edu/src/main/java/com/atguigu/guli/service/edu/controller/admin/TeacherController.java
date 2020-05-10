@@ -28,7 +28,7 @@ import java.util.Map;
  */
 
 @Slf4j
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = {"讲师管理"})
 @RestController
 @RequestMapping("/admin/edu/teacher")

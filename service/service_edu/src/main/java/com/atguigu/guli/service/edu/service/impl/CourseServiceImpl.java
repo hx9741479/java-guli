@@ -103,7 +103,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             queryWrapper.like("c.title", title);
         }
 
-        if (!StringUtils.isEmpty(teacherId) ) {
+        if (!StringUtils.isEmpty(teacherId)) {
             queryWrapper.eq("c.teacher_id", teacherId);
         }
 
@@ -117,7 +117,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
         Page<CourseVo> pageParam = new Page<>(page, limit);
         //放入分页参数和查询条件参数，mp会自动组装
-        List<CourseVo> records = baseMapper.selectPageByCourseQueryVo(pageParam,queryWrapper);
+        List<CourseVo> records = baseMapper.selectPageByCourseQueryVo(pageParam, queryWrapper);
         pageParam.setRecords(records);
         return pageParam;
     }
@@ -126,9 +126,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Override
     public boolean removeCoverById(String id) {
         Course course = baseMapper.selectById(id);
-        if(course != null) {
+        if (course != null) {
             String cover = course.getCover();
-            if(!StringUtils.isEmpty(cover)){
+            if (!StringUtils.isEmpty(cover)) {
                 //删除图片
                 R r = ossFileService.removeFile(cover);
                 return r.getSuccess();
@@ -205,9 +205,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         }
 
         if (!StringUtils.isEmpty(webCourseQueryVo.getPriceSort())) {
-            if(webCourseQueryVo.getType() == null || webCourseQueryVo.getType() == 1){
+            if (webCourseQueryVo.getType() == null || webCourseQueryVo.getType() == 1) {
                 queryWrapper.orderByDesc("price");
-            }else {
+            } else {
                 queryWrapper.orderByAsc("price");
             }
         }

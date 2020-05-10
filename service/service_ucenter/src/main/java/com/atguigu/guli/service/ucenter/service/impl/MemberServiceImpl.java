@@ -128,5 +128,10 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         return memberDto;
     }
 
+    @Override
+    public Integer countRegisterNum(String day) {
+        return baseMapper.selectRegisterNumByDay(day);
+    }
+
 
 }
